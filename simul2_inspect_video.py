@@ -17,7 +17,7 @@ import numpy as np
 from ddm_toolkit.videofig import videofig 
 from ddm_toolkit import sim_params
 
-
+SAVE_PLOTS = True
 # Get parameters
 sim = sim_params()
 
@@ -38,6 +38,24 @@ vmx = img.max() / img_overdrive # avoid autoscale of colormap
 
 vf_redraw_init=False
 vf_redraw_img=None
+
+class Redraw(object):
+    def __init__(self, amp=3000, f0=3):
+        self.initialized = False
+        self.amp = amp
+        self.f0 = f0
+
+    def draw(self, f, ax):
+        amp = float(f) / self.amp
+        f0 = self.f0
+        t = np.arange(0.0, 1.0, 0.001)
+        s = amp * np.sin(2 * np.pi * f0 * t)
+        if not self.initialized:
+            self.l, = ax.plot(t, s, lw=2, color='red')
+            self.initialized = True
+        else:
+            self.l.set_ydata(s)
+
 def vf_redraw(fri, ax):
     global img
     global vmx
@@ -55,6 +73,8 @@ print("[ENTER]: toggle pause/play")
 print("[LEFT]/[RIGHT]: scroll frames")
 print("[MOUSE]: manipulate time bar")
 
-videofig(Ni, vf_redraw, play_fps=10)
 
-
+if not SAVE_PLOTS:
+    videofig(Ni, vf_redraw, play_fps=10)
+else:
+    videofig(Ni, vf_redraw, play_fps=10, save_dir='Simul2')

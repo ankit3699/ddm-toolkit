@@ -11,6 +11,7 @@
 # STEP 4: Inspect ImageStructureFunction (videofig player)
 #
 
+from simul2_inspect_video import SAVE_PLOTS
 from ddm_toolkit import ImageStructureFunction
 from ddm_toolkit import sim_params
 
@@ -21,7 +22,7 @@ from ddm_toolkit.videofig import videofig
 # SIMULATION/ANALYSIS PARAMETERS
 #
 sim = sim_params()
-
+SAVE_PLOTS = True 
 # overdrive parameter (boost brightness)
 #TODO in parameter file?
 img_overdrive = 2.5
@@ -52,6 +53,9 @@ print("[ENTER]: toggle pause/play")
 print("[LEFT]/[RIGHT]: scroll frames")
 print("[MOUSE]: manipulate time bar")
 
-videofig(Ni, vf_redraw, play_fps=10)
+if not SAVE_PLOTS:
+    videofig(Ni, vf_redraw, play_fps=10)
+else:
+    videofig(Ni, vf_redraw, play_fps=10, save_dir='Simul4_ISF')
 
 
